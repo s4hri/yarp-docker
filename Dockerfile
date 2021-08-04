@@ -48,7 +48,6 @@ RUN cd /home/docky/yarp/build/bindings && \
 
 USER root
 RUN cp /home/docky/robotology-build/lib/python3/dist-packages/*.* /usr/lib/python3/dist-packages/
-RUN cp -r /home/docky/robotology-build/* /usr/local
 
 USER docky
 
