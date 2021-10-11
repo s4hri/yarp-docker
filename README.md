@@ -1,5 +1,10 @@
 # yarp-docker
 
-# How to run the Docker container
+# 1. Install/Update xpman
 
-    make run
+    cd .init
+    bash init.sh
+
+# How to build and run
+
+    xpman all
