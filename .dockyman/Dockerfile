@@ -26,7 +26,7 @@ RUN if [ $(getent group audio) ]; then groupmod -o audio --gid ${GROUP_AUDIO}; e
 RUN if [ $(getent group video) ]; then groupmod -o video --gid ${GROUP_VIDEO}; else groupadd video --gid ${GROUP_VIDEO}; fi
 RUN if [ $(getent group input) ]; then groupmod -o input --gid ${GROUP_INPUT}; else groupadd input --gid ${GROUP_INPUT}; fi
 
-RUN if [ -z "$(getent passwd "${LOCAL_USER_ID}" | cut -d: -f1)"]; then \
+RUN if [ -z "$(getent passwd "${LOCAL_USER_ID}" | cut -d: -f1)" ]; then \
       if [ $(getent passwd ${USER}) ]; then \
           echo "User exists" && usermod -u ${LOCAL_USER_ID} ${USER}; \
       else \

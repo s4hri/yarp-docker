@@ -1,10 +1,10 @@
 # yarp-docker
 
-# 1. Install/Update xpman
 
-    cd .init
-    bash init.sh
+# How to build
 
-# How to build and run
+    .dockyman/build.sh all
 
-    xpman all
+# How to run
+
+    .dockyman/run.sh
