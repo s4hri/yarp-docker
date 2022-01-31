@@ -30,13 +30,14 @@ RUN if [ -z "$(getent passwd "${LOCAL_USER_ID}" | cut -d: -f1)" ]; then \
       if [ $(getent passwd ${USER}) ]; then \
           echo "User exists" && usermod -u ${LOCAL_USER_ID} ${USER}; \
       else \
-          echo "User not found" && useradd -ms /bin/bash ${USER} && passwd -d ${USER}; \
+          echo "User not found" && useradd -ms /bin/bash ${USER} && passwd -d ${USER} && usermod -u ${LOCAL_USER_ID} ${USER}; \
       fi; \
     fi
 
-RUN usermod -a -G root,sudo,${GROUP_AUDIO},${GROUP_VIDEO},${GROUP_INPUT} -u ${LOCAL_USER_ID} "$(getent passwd ${LOCAL_USER_ID} | cut -d: -f1)"
+RUN usermod -a -G root,sudo,${GROUP_AUDIO},${GROUP_VIDEO},${GROUP_INPUT} "$(getent passwd ${LOCAL_USER_ID} | cut -d: -f1)"
 
 WORKDIR ${WORKDIR}
 
 ENV PATH=${PATH}:~/.local/bin:${WORKDIR}
 USER ${LOCAL_USER_ID}
+RUN mkdir -p ${HOME}/.local && mkdir -p ${HOME}/.config
