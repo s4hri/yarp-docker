@@ -26,47 +26,47 @@ version: '3.8'
 
 services:
 
-  yarp:
-    image: ${PJT_DOCKER_IMAGE}.local
-    profiles: ["local"]
+  local:
 
     build:
+      context: ..
       args:
-        DOCKER_SRC: ${PJT_DOCKER_IMAGE}
-        USERNAME: ${USERNAME}
-
-    extends:
-      file: ${BASE_SERVICE_FILENAME}
-      service: ${BASE_SERVICE_NAME}
+        LOCAL_USER_ID: ${LOCAL_USER_ID}
+        LOCAL_GROUP_ID: ${LOCAL_GROUP_ID}
+        GROUP_AUDIO: ${GROUP_AUDIO}
+        GROUP_VIDEO: ${GROUP_VIDEO}
+        GROUP_INPUT: ${GROUP_INPUT}
+        XDG_RUNTIME_DIR: ${XDG_RUNTIME_DIR}
 
     environment:
-        - PROJECT_NAME=${PROJECT_NAME}
-        - RELEASE=${RELEASE}
+        - DISPLAY=${DISPLAY}
+        - QT_X11_NO_MITSHM=1
+        - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+        - PULSE_COOKIE=/run/pulse/cookie
+        - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
 
-    command: ["/bin/bash", "-c", "terminator"]
+    privileged: true
+    stdin_open: true
+    tty: true
+    network_mode: host
 
     volumes:
       - type: bind
-        source: ./shared
-        target: /home/${USERNAME}/shared
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
 
-      - type: volume
-        source: yarp-config
-        target: /home/icub/.config/yarp
+      - type: bind
+        source: ${XDG_RUNTIME_DIR}/pulse
+        target: ${XDG_RUNTIME_DIR}/pulse
 
+      - type: bind
+        source: ${XDG_RUNTIME_DIR}/dconf
+        target: ${XDG_RUNTIME_DIR}/dconf
 
-  yarp.base:
-    image: ${PJT_DOCKER_IMAGE}
-    profiles: ["base"]
+      - type: bind
+        source: ${XDG_RUNTIME_DIR}/pulse/native
+        target: ${XDG_RUNTIME_DIR}/pulse/native
 
-    build:
-      context: docker
-      args:
-        DOCKER_SRC: ${DOCKER_SRC}
-        YCM_TAG_VER: v0.13.0
-        YARP_TAG_VER: v3.6.0
-        ROBOT_CODE: /usr/local/src/robot
-
-
-volumes:
-  yarp-config:
+      - type: bind
+        source: ${HOME}/.config/pulse/cookie
+        target: /run/pulse/cookie

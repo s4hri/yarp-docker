@@ -5,7 +5,7 @@ LABEL maintainer="Davide De Tommaso <davide.detommaso@iit.it>"
 
 ARG YARP_TAG_VER
 ARG YCM_TAG_VER
-ARG YARP_SRC="/usr/local/src"
+ARG ROBOT_CODE="/usr/local/src/robot"
 
 ARG YARP_PARAMS="-DYARP_COMPILE_libYARP_math=ON -DYARP_COMPILE_BINDINGS=ON \
                  -DCREATE_PYTHON=ON -DENABLE_yarpcar_h264=ON \
@@ -18,8 +18,11 @@ ARG YARP_PYTHON3="-DPYTHON_EXECUTABLE=/usr/bin/python3.8 \
 
 ENV TZ=Europe/Rome
 ENV DEBIAN_FRONTEND noninteractive
+ENV ROBOT_CODE $ROBOT_CODE
 
-RUN cd $YARP_SRC && \
+RUN mkdir -p $ROBOT_CODE
+
+RUN cd $ROBOT_CODE && \
     git clone https://github.com/robotology/ycm -b $YCM_TAG_VER && \
     cd ycm && \
     mkdir build && \
@@ -28,7 +31,7 @@ RUN cd $YARP_SRC && \
     make -j$(nproc) && \
     make install;
 
-RUN cd $YARP_SRC && \
+RUN cd $ROBOT_CODE && \
     git clone https://github.com/robotology/yarp -b $YARP_TAG_VER && \
     cd yarp && \
     mkdir build && \
@@ -37,9 +40,12 @@ RUN cd $YARP_SRC && \
     make -j$(nproc) && \
     make install;
 
-RUN cd $YARP_SRC/yarp/build/bindings && \
+RUN cd $ROBOT_CODE/yarp/build/bindings && \
     cmake .. $YARP_PYTHON3 && \
     make -j$(nproc) && \
     make install;
 
-ENV PYTHONPATH=$PYTHONPATH:$YARP_SRC/yarp/build/lib/python3
+ENV PYTHONPATH=$PYTHONPATH:$ROBOT_CODE/yarp/build/lib/python3
+
+RUN mkdir -p /home/icub/.config/yarp
+COPY yarp.conf /home/icub/.config/yarp

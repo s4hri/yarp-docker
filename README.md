@@ -3,7 +3,7 @@
 
 # How to build
 
-    .dockyman/build.sh all
+    .dockyman/build.sh
 
 # How to run
 
