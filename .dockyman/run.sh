@@ -33,9 +33,8 @@ source ${XP_SCRIPT_DIR}/setup.sh
 if [[ $(lsmod | grep nvidia) ]]; then
   export BASE_SERVICE_FILENAME=${XP_TARGET_DIR}/.dockyman/compose/nvidia.yml
 else
-  export BASE_SERVICE_FILENAME=${XP_TARGET_DIR}/.dockyman/compose/local.yml
+  export BASE_SERVICE_FILENAME=${XP_TARGET_DIR}/.dockyman/compose/common.yml
 fi
 
-bash ${XP_SCRIPT_DIR}/build.sh
-docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml --profile local up
-docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml --profile local down --remove-orphans
+docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml $@ up
+docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml $@ down --remove-orphans

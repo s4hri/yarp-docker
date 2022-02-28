@@ -26,39 +26,13 @@ version: '3.8'
 
 services:
 
-  yarp:
-    image: ${PJT_DOCKER_IMAGE}.local
+  yarp.base:
+    image: ${PJT_DOCKER_IMAGE}
+
     build:
-      context: .dockyman
+      context: docker
       args:
-        LOCAL_USER_ID: ${LOCAL_USER_ID}
-        LOCAL_GROUP_ID: ${LOCAL_GROUP_ID}
-        GROUP_AUDIO: ${GROUP_AUDIO}
-        GROUP_VIDEO: ${GROUP_VIDEO}
-        GROUP_INPUT: ${GROUP_INPUT}
-        XDG_RUNTIME_DIR: ${XDG_RUNTIME_DIR}
-        DOCKER_SRC: ${PJT_DOCKER_IMAGE}
-        USERNAME: ${USERNAME}
-
-    extends:
-      file: ${BASE_SERVICE_FILENAME}
-      service: ${BASE_SERVICE_NAME}
-
-    environment:
-        - PROJECT_NAME=${PROJECT_NAME}
-        - RELEASE=${RELEASE}
-
-    command: ["/bin/bash", "-c", "terminator"]
-
-    volumes:
-      - type: bind
-        source: ./shared
-        target: /home/${USERNAME}/shared
-
-      - type: volume
-        source: yarp-config
-        target: /home/icub/.config/yarp
-
-
-volumes:
-  yarp-config:
+        DOCKER_SRC: ${DOCKER_SRC}
+        YCM_TAG_VER: v0.13.0
+        YARP_TAG_VER: v3.6.0
+        ROBOT_CODE: /usr/local/src/robot

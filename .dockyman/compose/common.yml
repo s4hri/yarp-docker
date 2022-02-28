@@ -26,17 +26,7 @@ version: '3.8'
 
 services:
 
-  local:
-
-    build:
-      context: ..
-      args:
-        LOCAL_USER_ID: ${LOCAL_USER_ID}
-        LOCAL_GROUP_ID: ${LOCAL_GROUP_ID}
-        GROUP_AUDIO: ${GROUP_AUDIO}
-        GROUP_VIDEO: ${GROUP_VIDEO}
-        GROUP_INPUT: ${GROUP_INPUT}
-        XDG_RUNTIME_DIR: ${XDG_RUNTIME_DIR}
+  common:
 
     environment:
         - DISPLAY=${DISPLAY}

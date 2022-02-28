@@ -33,23 +33,19 @@ source ${XP_SCRIPT_DIR}/setup.sh
 docker()
 {
   echo "Building project docker image ${PJT_DOCKER_IMAGE}"
-  docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml \
-                 --profile base \
-                 build $1
+  docker-compose -f ${XP_TARGET_DIR}/docker-compose.base.yml build $1
 }
 
 local()
 {
   echo "Pulling docker image ${PJT_DOCKER_IMAGE} and building local docker image ${LOCAL_DOCKER_IMAGE}, USERNAME: ${USERNAME}, LOCAL_UID: ${LOCAL_USER_ID}, GROUP_AUDIO: ${GROUP_AUDIO}, GROUP_VIDEO: ${GROUP_VIDEO}, GROUP_INPUT: ${GROUP_INPUT}"
-  docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml \
-                 --profile local \
-                 build $1
+  docker-compose -f ${XP_TARGET_DIR}/docker-compose.yml build $1
 }
 
 distro()
 {
   echo "Pushing docker image ${PJT_DOCKER_IMAGE} ..."
-  docker-compose --profile base push
+  docker-compose -f ${XP_TARGET_DIR}/docker-compose.base.yml push
 }
 
 
