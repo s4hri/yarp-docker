@@ -3,8 +3,18 @@
 
 # How to build
 
-    .dockyman/build.sh
+    docker compose build
 
 # How to run
 
-    .dockyman/run.sh
+    docker compose up
+
+# How to test 
+
+## Testing YARP
+
+    docker compose --profile test up yarp.test
+
+## Testing X server and audio
+
+    docker compose run yarp bash tests/test_utils.sh

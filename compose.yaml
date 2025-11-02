@@ -1,0 +1,47 @@
+services:
+
+  yarp:
+    image: iitschri/yarp-docker:v3.9.0
+    container_name: yarp
+
+    build:
+      context: .
+      args:
+        BASE_DIR: /usr/local/src/robotology
+        YCM_TAG_VER: v0.16.9
+        YARP_TAG_VER: v3.9.0
+        YARP_PARAMS: "-DCMAKE_BUILD_TYPE=Release -DYARP_COMPILE_libYARP_math=ON -DYARP_COMPILE_BINDINGS=ON \
+                      -DCREATE_PYTHON=ON -DENABLE_yarpcar_h264=ON \
+                      -DYARP_USE_OPENCV=ON -DENABLE_yarpmod_opencv_grabber=ON -DENABLE_yarpcar_mjpeg=ON \
+                      -DENABLE_yarpmod_grabber=ON"
+
+        YARP_PYTHON3: "-DPYTHON_EXECUTABLE=/usr/bin/python3.10"
+
+    command: ["/bin/bash", "-c", "yarpserver --write & sleep 3; yarprun --server /yarpsrv --log"]
+
+    stdin_open: true
+    tty: true
+    network_mode: host
+    privileged: true
+    
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:-/tmp}/pulse/native
+      - PULSE_COOKIE=/run/pulse/cookie
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp}
+      - XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/local/share:/usr/share}
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
+      - ${XDG_RUNTIME_DIR:-/tmp}/pulse:${XDG_RUNTIME_DIR:-/tmp}/pulse
+      - ${XDG_RUNTIME_DIR:-/tmp}/dconf:${XDG_RUNTIME_DIR:-/tmp}/dconf
+      
+  yarp.test:
+    image: iitschri/yarp-docker:v3.9.0
+    container_name: yarp-test
+
+    command: ["/bin/bash", "-c", "bash tests/test_yarp.sh"]
+
+    profiles:
+      - test
