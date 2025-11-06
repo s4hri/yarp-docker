@@ -20,7 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
     ca-certificates tzdata x11-apps mesa-utils pulseaudio-utils \
     alsa-utils ffmpeg libasound2-plugins alsa-ucm-conf x11-xserver-utils \
+    nano vim  curl wget openssh-client ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /etc/ssh \
+    && ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
 
 WORKDIR ${BASE_DIR}
 
