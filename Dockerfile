@@ -26,6 +26,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /etc/ssh \
     && ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
 
+# Add sound configuration
+COPY pulse-client.conf /etc/pulse/client.conf
+COPY asound.conf /etc/asound.conf
+
 WORKDIR ${BASE_DIR}
 
 RUN cd $BASE_DIR && \
