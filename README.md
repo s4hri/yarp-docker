@@ -7,6 +7,7 @@
 
 # How to run
 
+    xhost +local:docker
     docker compose up
 
 # How to test 
@@ -17,4 +18,5 @@
 
 ## Testing X server and audio
 
+    xhost +local:docker
     docker compose run yarp bash tests/test_utils.sh
