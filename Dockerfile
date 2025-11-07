@@ -27,7 +27,6 @@ RUN mkdir -p /etc/ssh \
     && ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
 
 # Add sound configuration
-COPY pulse-client.conf /etc/pulse/client.conf
 COPY asound.conf /etc/asound.conf
 
 WORKDIR ${BASE_DIR}
