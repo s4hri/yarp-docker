@@ -1,12 +1,13 @@
 services:
 
   yarp:
-    image: iitschri/yarp-docker:v3.9.0
+    image: iitschri/yarp-docker:v3.9.0-cuda12.8.0
     container_name: yarp
 
     build:
       context: .
       args:
+        DOCKER_SRC: nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04
         BASE_DIR: /usr/local/src/robotology
         YCM_TAG_VER: v0.16.9
         YARP_TAG_VER: v3.9.0
@@ -30,6 +31,15 @@ services:
       - PULSE_COOKIE=/run/pulse/cookie
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp}
       - XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/local/share:/usr/share}
+      - GPU_PROFILE=${GPU_PROFILE:-nvidia-gpu}
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [utility, compute, graphics]
 
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
