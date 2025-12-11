@@ -1,7 +1,6 @@
 ARG DOCKER_SRC=ubuntu:22.04
 
 FROM ${DOCKER_SRC}
-FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04
 
 ARG BASE_DIR=/usr/local/src/robotology
 ARG YCM_TAG_VER=v0.16.9
